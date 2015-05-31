@@ -1,7 +1,9 @@
 var App = {
     Models: {},
     Collections: {},
-    Contacts: null
+    Views: {},
+    Contacts: null,
+    Directory: null
 };
 
 $(function() {
@@ -13,7 +15,7 @@ $(function() {
     });
 
     App.Contacts = new App.Collections.Contact();
-    App.Contacts.add(window.matt)
+    App.Contacts.add(window.matt);
 
     App.Contacts.add({
         firstName: 'Antonia',
@@ -22,21 +24,16 @@ $(function() {
         email: 'gypsyvegan@gmail.com'
     });
 
-    App.Contacts.add({});
 
-    var contactListing = '';
 
-    App.Contacts.each(function(contact) {
-        contactListing += '<div>' +
-            contact.get('firstName') + " " +
-            contact.get('lastName') + " ";
-
-        if (contact.isValid()) {
-            contactListing += "(valid)";
-        } else {
-            contactListing += "(invalid)";
-        }
-        contactListing += "</div>";
+    App.Directory = new App.Views.Directory({
+        el: $('#display')
     });
-    $('#display').html(contactListing);
+
+    App.Directory.render();
+
+    App.Contacts.on('add remove', function() {
+        App.Directory.render();
+    });
+
 });
